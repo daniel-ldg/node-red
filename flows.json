@@ -1,0 +1,174 @@
+[
+    {
+        "id": "e69ed8205d20472d",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a8b18fd74d1ffcb2",
+        "type": "chatbot-whatsapp-node",
+        "botname": "BotDesigner Solutions",
+        "phoneNumberId": "136404552885634",
+        "businessAccountId": "163169626762180",
+        "store": "361bc5b852c72e2f",
+        "log": "",
+        "debug": false,
+        "storeMessages": true,
+        "enableMissionControl": false,
+        "inspectMessages": true,
+        "chatbotId": ""
+    },
+    {
+        "id": "361bc5b852c72e2f",
+        "type": "chatbot-context-store",
+        "name": "chats",
+        "contextStorage": "sqlite",
+        "contextParams": "{\"dbPath\":\"./db.sqlite\",\"chatbotId\":\"my-bot\"}"
+    },
+    {
+        "id": "92ed171d46f6569f",
+        "type": "chatbot-whatsapp-receive",
+        "z": "e69ed8205d20472d",
+        "bot": "a8b18fd74d1ffcb2",
+        "botProduction": "",
+        "x": 130,
+        "y": 340,
+        "wires": [
+            [
+                "47055d33c057195c"
+            ]
+        ]
+    },
+    {
+        "id": "ad03d6452903ae7c",
+        "type": "chatbot-message",
+        "z": "e69ed8205d20472d",
+        "name": "Saludo",
+        "message": [
+            {
+                "message": "Hola, *{{payload.profileName}}*"
+            }
+        ],
+        "language": "none",
+        "x": 820,
+        "y": 320,
+        "wires": [
+            [
+                "ef1513b3dcd64329"
+            ]
+        ]
+    },
+    {
+        "id": "b2c6043b785b1038",
+        "type": "function",
+        "z": "e69ed8205d20472d",
+        "name": "Set profileName",
+        "func": "const profileName = msg?.originalMessage?.contacts?.at(0)?.profile?.name || \"usuario\"\nconst payload = { ...msg.payload, profileName }\nreturn { ...msg, payload }",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 320,
+        "wires": [
+            [
+                "ad03d6452903ae7c"
+            ]
+        ]
+    },
+    {
+        "id": "ef1513b3dcd64329",
+        "type": "chatbot-whatsapp-send",
+        "z": "e69ed8205d20472d",
+        "bot": "a8b18fd74d1ffcb2",
+        "botProduction": "",
+        "track": false,
+        "passThrough": false,
+        "errorOutput": false,
+        "outputs": 0,
+        "x": 1030,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c5e8645e91772ec3",
+        "type": "chatbot-location",
+        "z": "e69ed8205d20472d",
+        "name": "",
+        "latitude": "48.8584",
+        "longitude": "2.2945",
+        "place": "Eiffel Tower, Paris",
+        "x": 620,
+        "y": 360,
+        "wires": [
+            [
+                "ef1513b3dcd64329"
+            ]
+        ]
+    },
+    {
+        "id": "47055d33c057195c",
+        "type": "switch",
+        "z": "e69ed8205d20472d",
+        "name": "Interpretar comando",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "\\/?[Ss]alud(o|ar)",
+                "vt": "str",
+                "case": false
+            },
+            {
+                "t": "regex",
+                "v": "\\/?[Uu]bicaci[oó]n",
+                "vt": "str",
+                "case": false
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 380,
+        "y": 340,
+        "wires": [
+            [
+                "b2c6043b785b1038"
+            ],
+            [
+                "c5e8645e91772ec3"
+            ],
+            [
+                "0c10e0150f60921e"
+            ]
+        ]
+    },
+    {
+        "id": "0c10e0150f60921e",
+        "type": "chatbot-message",
+        "z": "e69ed8205d20472d",
+        "name": "Enviar lista de comandos",
+        "message": [
+            {
+                "message": "Comandos disponibles:\n - *Saludo* Saludo con nombres\n - *Ubicación* Enviar ubicación"
+            }
+        ],
+        "language": "none",
+        "x": 670,
+        "y": 400,
+        "wires": [
+            [
+                "ef1513b3dcd64329"
+            ]
+        ]
+    }
+]
