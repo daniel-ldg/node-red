@@ -2,10 +2,102 @@
     {
         "id": "e69ed8205d20472d",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Commands",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c3cd0592957ed522",
+        "type": "tab",
+        "label": "Liga BBVA MX Chat",
         "disabled": false,
         "info": "",
         "env": []
+    },
+    {
+        "id": "64c51dc3.e7bc74",
+        "type": "subflow",
+        "name": "Contact user",
+        "info": "Send a direct message to a chatbot user from **Mission Control**.\n\nConnect the output to the supported sender nodes (`Telegram Sender`, `Facebook Sender`, etc)\n\nThis option is available:\n\n* a widget in the dashboard\n* in the user modal in the [users list](/mc/users)\n* in the user records page (if plugins are installed, like [surveys](/mc/surveys), [transactions](/mc/transactions), etc)\n* \n\nVersion: _1.0.4_\n\nUrl: [GitHub](https://github.com/guidone/red-bot-send-message)",
+        "category": "RedBot Flows",
+        "in": [],
+        "out": [
+            {
+                "x": 1110,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "11bdc38.d0cd63d",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "color": "#ff6633",
+        "outputLabels": [
+            "To Senders"
+        ],
+        "icon": "node-red-contrib-chatbot/chatbot-message.png"
+    },
+    {
+        "id": "5cbd4a985a58f303",
+        "type": "group",
+        "z": "c3cd0592957ed522",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "c369ab27ca604527",
+            "23ba896c96293f8f",
+            "51f7d3e432ae9ceb",
+            "2b2635de6b5f2b92",
+            "d04b512b0c47be2d",
+            "45ca534d9f100487",
+            "1695256bf2b0ea33"
+        ],
+        "x": 334,
+        "y": 59,
+        "w": 812,
+        "h": 122
+    },
+    {
+        "id": "4f5ef6817955a651",
+        "type": "group",
+        "z": "c3cd0592957ed522",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "bff5eb935439389f",
+            "ab87ba80947faa32",
+            "312b3e8ede240b06",
+            "e516223a3bafa563",
+            "fac7902428d5c73f",
+            "ed97553a723d1fc0",
+            "6a430e2e8d895142",
+            "d65da5b996b3d2fe",
+            "0c5944c9c5ea6b26",
+            "55a9420fcfbcd9d2",
+            "9ee29c26106725e1"
+        ],
+        "x": 94,
+        "y": 199,
+        "w": 992,
+        "h": 222
     },
     {
         "id": "a8b18fd74d1ffcb2",
@@ -13,20 +105,89 @@
         "botname": "BotDesigner Solutions",
         "phoneNumberId": "136404552885634",
         "businessAccountId": "163169626762180",
-        "store": "361bc5b852c72e2f",
+        "store": "",
         "log": "",
         "debug": false,
         "storeMessages": true,
-        "enableMissionControl": false,
+        "enableMissionControl": true,
         "inspectMessages": true,
-        "chatbotId": ""
+        "chatbotId": "whatsapp-bot"
     },
     {
-        "id": "361bc5b852c72e2f",
-        "type": "chatbot-context-store",
-        "name": "chats",
-        "contextStorage": "sqlite",
-        "contextParams": "{\"dbPath\":\"./db.sqlite\",\"chatbotId\":\"my-bot\"}"
+        "id": "ab88d32d1bd067d3",
+        "type": "global-config",
+        "name": "global-config",
+        "env": []
+    },
+    {
+        "id": "b3b9183d.b6d918",
+        "type": "mc-input",
+        "z": "64c51dc3.e7bc74",
+        "name": "",
+        "topic": "message.send",
+        "x": 190,
+        "y": 120,
+        "wires": [
+            [
+                "25c2d074.4e58b"
+            ]
+        ]
+    },
+    {
+        "id": "11bdc38.d0cd63d",
+        "type": "chatbot-message",
+        "z": "64c51dc3.e7bc74",
+        "name": "From payload",
+        "message": [],
+        "x": 920,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d1d71469.e9df28",
+        "type": "comment",
+        "z": "64c51dc3.e7bc74",
+        "name": "Trigger the start of conversation from control panel",
+        "info": "",
+        "x": 270,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "25c2d074.4e58b",
+        "type": "function",
+        "z": "64c51dc3.e7bc74",
+        "name": "Payload for conversation",
+        "func": "const instantMessage = msg.payload;\n\nmsg.chatId = instantMessage.chatId;\nmsg.payload = instantMessage.message;\nmsg.botNode = instantMessage.botNode;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 120,
+        "wires": [
+            [
+                "4dc66a6.082aa94"
+            ]
+        ]
+    },
+    {
+        "id": "4dc66a6.082aa94",
+        "type": "chatbot-conversation",
+        "z": "64c51dc3.e7bc74",
+        "name": "",
+        "botDevelopment": "",
+        "botProduction": "",
+        "chatId": "",
+        "userId": "",
+        "transport": "",
+        "x": 730,
+        "y": 120,
+        "wires": [
+            [
+                "11bdc38.d0cd63d"
+            ]
+        ]
     },
     {
         "id": "92ed171d46f6569f",
@@ -34,7 +195,7 @@
         "z": "e69ed8205d20472d",
         "bot": "a8b18fd74d1ffcb2",
         "botProduction": "",
-        "x": 130,
+        "x": 150,
         "y": 340,
         "wires": [
             [
@@ -57,7 +218,7 @@
         "y": 320,
         "wires": [
             [
-                "ef1513b3dcd64329"
+                "5e11bde148c7f1f1"
             ]
         ]
     },
@@ -91,8 +252,8 @@
         "passThrough": false,
         "errorOutput": false,
         "outputs": 0,
-        "x": 1030,
-        "y": 360,
+        "x": 1050,
+        "y": 560,
         "wires": []
     },
     {
@@ -107,7 +268,7 @@
         "y": 360,
         "wires": [
             [
-                "ef1513b3dcd64329"
+                "5e11bde148c7f1f1"
             ]
         ]
     },
@@ -167,7 +328,425 @@
         "y": 400,
         "wires": [
             [
+                "5e11bde148c7f1f1"
+            ]
+        ]
+    },
+    {
+        "id": "e68e1ddceed0f2e3",
+        "type": "subflow:64c51dc3.e7bc74",
+        "z": "e69ed8205d20472d",
+        "name": "",
+        "x": 730,
+        "y": 460,
+        "wires": [
+            [
+                "5e11bde148c7f1f1"
+            ]
+        ]
+    },
+    {
+        "id": "28048c3ca06d788c",
+        "type": "link in",
+        "z": "e69ed8205d20472d",
+        "name": "link in 1",
+        "links": [],
+        "x": 925,
+        "y": 560,
+        "wires": [
+            [
                 "ef1513b3dcd64329"
+            ]
+        ]
+    },
+    {
+        "id": "5e11bde148c7f1f1",
+        "type": "link out",
+        "z": "e69ed8205d20472d",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [],
+        "x": 965,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c369ab27ca604527",
+        "type": "chatbot-message",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "name": "Agree Privacy Policy",
+        "message": [
+            {
+                "message": "¡Hola! 👋 Soy AntonIA, tu asistente virtual. Estoy aquí para responder tus preguntas sobre el reglamento de la LIGA BBVA MX Temporada 2022-2023. \n\nAntes de continuar, por favor, lee y acepta nuestra política de privacidad. Puedes encontrarla aquí [inserta el enlace a la política de privacidad].\n\n¿Aceptas nuestra política de privacidad? Por favor, responde *Sí* para continuar. 🤖🔐"
+            }
+        ],
+        "language": "none",
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "23ba896c96293f8f"
+            ]
+        ]
+    },
+    {
+        "id": "23ba896c96293f8f",
+        "type": "chatbot-whatsapp-send",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "bot": "a8b18fd74d1ffcb2",
+        "botProduction": "",
+        "track": true,
+        "passThrough": false,
+        "errorOutput": false,
+        "outputs": 1,
+        "x": 670,
+        "y": 140,
+        "wires": [
+            [
+                "51f7d3e432ae9ceb"
+            ]
+        ]
+    },
+    {
+        "id": "51f7d3e432ae9ceb",
+        "type": "switch",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "name": "accepted?",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "s[ií]",
+                "vt": "str",
+                "case": true
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 850,
+        "y": 140,
+        "wires": [
+            [
+                "2b2635de6b5f2b92",
+                "45ca534d9f100487"
+            ],
+            [
+                "c369ab27ca604527"
+            ]
+        ]
+    },
+    {
+        "id": "2b2635de6b5f2b92",
+        "type": "chatbot-context",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "command": "set",
+        "fieldValue": "true",
+        "fieldType": "bool",
+        "fieldName": "authorized",
+        "x": 1050,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d04b512b0c47be2d",
+        "type": "comment",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "name": "Si no ha aceptado la politica de privacidad se envía un mensajo solicitando aceptar",
+        "info": "",
+        "x": 650,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "45ca534d9f100487",
+        "type": "chatbot-message",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "name": "Ready",
+        "message": [
+            {
+                "message": "¡Excelente! 😃\n\n¡Gracias por aceptar nuestra política de privacidad!\n\nEstoy lista para ayudarte con todas tus dudas sobre el Reglamento de Competencia de la LIGA BBVA MX Temporada 2022-2023.\n\n¿En qué puedo asistirte hoy? ⚽📖🤖"
+            }
+        ],
+        "language": "none",
+        "x": 1010,
+        "y": 140,
+        "wires": [
+            [
+                "1695256bf2b0ea33"
+            ]
+        ]
+    },
+    {
+        "id": "bff5eb935439389f",
+        "type": "chatbot-whatsapp-send",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "bot": "a8b18fd74d1ffcb2",
+        "botProduction": "",
+        "track": true,
+        "passThrough": false,
+        "errorOutput": false,
+        "outputs": 1,
+        "x": 450,
+        "y": 320,
+        "wires": [
+            [
+                "312b3e8ede240b06"
+            ]
+        ]
+    },
+    {
+        "id": "2657832e6fb7039d",
+        "type": "chatbot-whatsapp-receive",
+        "z": "c3cd0592957ed522",
+        "bot": "a8b18fd74d1ffcb2",
+        "botProduction": "",
+        "x": 150,
+        "y": 140,
+        "wires": [
+            [
+                "c369ab27ca604527"
+            ]
+        ]
+    },
+    {
+        "id": "1695256bf2b0ea33",
+        "type": "link out",
+        "z": "c3cd0592957ed522",
+        "g": "5cbd4a985a58f303",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "ab87ba80947faa32"
+        ],
+        "x": 1105,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ab87ba80947faa32",
+        "type": "link in",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "link in 2",
+        "links": [
+            "1695256bf2b0ea33"
+        ],
+        "x": 135,
+        "y": 320,
+        "wires": [
+            [
+                "55a9420fcfbcd9d2"
+            ]
+        ]
+    },
+    {
+        "id": "9ee29c26106725e1",
+        "type": "comment",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Loop de preguntas y respuestas usando ChatPDF API",
+        "info": "",
+        "x": 320,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "312b3e8ede240b06",
+        "type": "function",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Save User Message",
+        "func": "const chat = msg.chat();\n\nchat.get(\"messages\").then(messages => {\n    const { content } = msg.payload\n    messages.push({\n        role: \"user\",\n        content\n    })\n    return chat.set(\"messages\", messages)\n}).then(() => node.send(msg))\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 320,
+        "wires": [
+            [
+                "ed97553a723d1fc0",
+                "fac7902428d5c73f"
+            ]
+        ]
+    },
+    {
+        "id": "e516223a3bafa563",
+        "type": "http request",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Call ChatPDF API",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "body",
+        "url": "https://api.chatpdf.com/v1/chats/message",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "x-api-key",
+                "valueType": "other",
+                "valueValue": "sec_BIq0JNy0qBbdIjfM84g100X6LPk0nqvI"
+            },
+            {
+                "keyType": "other",
+                "keyValue": "Content-Type",
+                "valueType": "other",
+                "valueValue": "application/json"
+            }
+        ],
+        "x": 710,
+        "y": 380,
+        "wires": [
+            [
+                "6a430e2e8d895142",
+                "0c5944c9c5ea6b26"
+            ]
+        ]
+    },
+    {
+        "id": "fac7902428d5c73f",
+        "type": "function",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Build API Call Payload",
+        "func": "const sourceId = flow.get(\"sourceId\")\nconst maxMessages = flow.get(\"maxMessages\")\nconst chat = msg.chat();\n\nchat.get(\"messages\").then(messages => {\n    while (messages.length > maxMessages) {\n        messages.shift()\n    }\n    chat.set(\"messages\", messages)\n    const payload = {\n        sourceId,\n        messages\n    }\n    return node.send({ ...msg, payload })\n})",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 380,
+        "wires": [
+            [
+                "e516223a3bafa563"
+            ]
+        ]
+    },
+    {
+        "id": "52f0763e955f0390",
+        "type": "config",
+        "z": "c3cd0592957ed522",
+        "name": "Set Flow Variables At Start",
+        "properties": [
+            {
+                "p": "maxMessages",
+                "pt": "flow",
+                "to": "6",
+                "tot": "num"
+            },
+            {
+                "p": "sourceId",
+                "pt": "flow",
+                "to": "cha_9dCpJGc7liOjeyEaxYV1a",
+                "tot": "str"
+            }
+        ],
+        "active": true,
+        "x": 160,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "ed97553a723d1fc0",
+        "type": "chatbot-push-message",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "x": 920,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a430e2e8d895142",
+        "type": "function",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Save Assistant Message",
+        "func": "const chat = msg.chat();\n\nchat.get(\"messages\").then(messages => {\n    const { content } = msg.payload\n    messages.push({\n        role: \"assistant\",\n        content\n    })\n    return chat.set(\"messages\", messages)\n}).then(() => node.send(msg))\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d65da5b996b3d2fe",
+        "type": "chatbot-pop-message",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "bff5eb935439389f"
+            ]
+        ]
+    },
+    {
+        "id": "0c5944c9c5ea6b26",
+        "type": "chatbot-message",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "name": "Response",
+        "message": [
+            {
+                "message": "{{payload.content}}"
+            }
+        ],
+        "language": "none",
+        "x": 900,
+        "y": 380,
+        "wires": [
+            [
+                "d65da5b996b3d2fe"
+            ]
+        ]
+    },
+    {
+        "id": "55a9420fcfbcd9d2",
+        "type": "chatbot-context",
+        "z": "c3cd0592957ed522",
+        "g": "4f5ef6817955a651",
+        "command": "set",
+        "fieldValue": "[]",
+        "fieldType": "json",
+        "fieldName": "messages",
+        "x": 250,
+        "y": 320,
+        "wires": [
+            [
+                "bff5eb935439389f"
             ]
         ]
     }
